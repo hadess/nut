@@ -184,7 +184,7 @@ void Socket::connect(const std::string& host, int port)
 			{
 			case EAFNOSUPPORT:
 			case EINVAL:
-                break;
+				break;
 			default:
 				throw nut::SystemException();
 			}
@@ -437,7 +437,7 @@ std::set<Device> Client::getDevices()
 	std::set<std::string> devs = getDeviceNames();
 	for(std::set<std::string>::iterator it=devs.begin(); it!=devs.end(); ++it)
 	{
-	  res.insert(Device(this, *it));
+		res.insert(Device(this, *it));
 	}
 
 	return res;
@@ -451,16 +451,16 @@ bool Client::hasDeviceVariable(const std::string& dev, const std::string& name)
 
 std::map<std::string,std::vector<std::string> > Client::getDeviceVariableValues(const std::string& dev)
 {
-  std::map<std::string,std::vector<std::string> > res;
+	std::map<std::string,std::vector<std::string> > res;
 
-  std::set<std::string> names = getDeviceVariableNames(dev);
-  for(std::set<std::string>::iterator it=names.begin(); it!=names.end(); ++it)
-  {
-    const std::string& name = *it;
-    res[name] = getDeviceVariableValue(dev, name);
-  }
+	std::set<std::string> names = getDeviceVariableNames(dev);
+	for(std::set<std::string>::iterator it=names.begin(); it!=names.end(); ++it)
+	{
+		const std::string& name = *it;
+		res[name] = getDeviceVariableValue(dev, name);
+	}
 
-  return res;
+	return res;
 }
 
 std::map<std::string,std::map<std::string,std::vector<std::string> > > Client::getDevicesVariableValues(const std::set<std::string>& devs)
@@ -477,8 +477,8 @@ std::map<std::string,std::map<std::string,std::vector<std::string> > > Client::g
 
 bool Client::hasDeviceCommand(const std::string& dev, const std::string& name)
 {
-  std::set<std::string> names = getDeviceCommandNames(dev);
-  return names.find(name) != names.end();
+	std::set<std::string> names = getDeviceCommandNames(dev);
+	return names.find(name) != names.end();
 }
 
 bool Client::hasFeature(const Feature& feature)
@@ -612,7 +612,7 @@ std::set<std::string> TcpClient::getDeviceNames()
 
 std::string TcpClient::getDeviceDescription(const std::string& name)
 {
-  return get("UPSDESC", name)[0];
+	return get("UPSDESC", name)[0];
 }
 
 std::set<std::string> TcpClient::getDeviceVariableNames(const std::string& dev)
@@ -1125,7 +1125,7 @@ bool Device::operator==(const Device& dev)const
 
 bool Device::operator<(const Device& dev)const
 {
-  return getName()<dev.getName();
+	return getName()<dev.getName();
 }
 
 std::string Device::getDescription()
@@ -1174,11 +1174,11 @@ void Device::setVariable(const std::string& name, const std::vector<std::string>
 
 Variable Device::getVariable(const std::string& name)
 {
-  if (!isOk()) throw NutException("Invalid device");
-  if(getClient()->hasDeviceVariable(getName(), name))
-  	return Variable(this, name);
-  else
-    return Variable(NULL, "");
+	if (!isOk()) throw NutException("Invalid device");
+	if(getClient()->hasDeviceVariable(getName(), name))
+		return Variable(this, name);
+	else
+		return Variable(NULL, "");
 }
 
 std::set<Variable> Device::getVariables()
@@ -1186,11 +1186,11 @@ std::set<Variable> Device::getVariables()
 	std::set<Variable> set;
 	if (!isOk()) throw NutException("Invalid device");
 
-  std::set<std::string> names = getClient()->getDeviceVariableNames(getName());
-  for(std::set<std::string>::iterator it=names.begin(); it!=names.end(); ++it)
-  {
+	std::set<std::string> names = getClient()->getDeviceVariableNames(getName());
+	for(std::set<std::string>::iterator it=names.begin(); it!=names.end(); ++it)
+	{
 		set.insert(Variable(this, *it));
-  }
+	}
 
 	return set;
 }
@@ -1200,11 +1200,11 @@ std::set<Variable> Device::getRWVariables()
 	std::set<Variable> set;
 	if (!isOk()) throw NutException("Invalid device");
 
-  std::set<std::string> names = getClient()->getDeviceRWVariableNames(getName());
-  for(std::set<std::string>::iterator it=names.begin(); it!=names.end(); ++it)
-  {
+	std::set<std::string> names = getClient()->getDeviceRWVariableNames(getName());
+	for(std::set<std::string>::iterator it=names.begin(); it!=names.end(); ++it)
+	{
 		set.insert(Variable(this, *it));
-  }
+	}
 
 	return set;
 }
@@ -1230,29 +1230,29 @@ std::set<Command> Device::getCommands()
 
 Command Device::getCommand(const std::string& name)
 {
-  if (!isOk()) throw NutException("Invalid device");
-  if(getClient()->hasDeviceCommand(getName(), name))
-  	return Command(this, name);
-  else
-    return Command(NULL, "");
+	if (!isOk()) throw NutException("Invalid device");
+	if(getClient()->hasDeviceCommand(getName(), name))
+		return Command(this, name);
+	else
+		return Command(NULL, "");
 }
 
 TrackingID Device::executeCommand(const std::string& name, const std::string& param)
 {
-  if (!isOk()) throw NutException("Invalid device");
-  return getClient()->executeDeviceCommand(getName(), name, param);
+	if (!isOk()) throw NutException("Invalid device");
+	return getClient()->executeDeviceCommand(getName(), name, param);
 }
 
 void Device::login()
 {
-  if (!isOk()) throw NutException("Invalid device");
-  getClient()->deviceLogin(getName());
+	if (!isOk()) throw NutException("Invalid device");
+	getClient()->deviceLogin(getName());
 }
 
 void Device::master()
 {
-  if (!isOk()) throw NutException("Invalid device");
-  getClient()->deviceMaster(getName());
+	if (!isOk()) throw NutException("Invalid device");
+	getClient()->deviceMaster(getName());
 }
 
 void Device::forcedShutdown()
@@ -1261,8 +1261,8 @@ void Device::forcedShutdown()
 
 int Device::getNumLogins()
 {
-  if (!isOk()) throw NutException("Invalid device");
-  return getClient()->deviceGetNumLogins(getName());
+	if (!isOk()) throw NutException("Invalid device");
+	return getClient()->deviceGetNumLogins(getName());
 }
 
 /*
@@ -1330,12 +1330,12 @@ bool Variable::operator<(const Variable& var)const
 
 std::vector<std::string> Variable::getValue()
 {
-  return getDevice()->getClient()->getDeviceVariableValue(getDevice()->getName(), getName());
+	return getDevice()->getClient()->getDeviceVariableValue(getDevice()->getName(), getName());
 }
 
 std::string Variable::getDescription()
 {
-  return getDevice()->getClient()->getDeviceVariableDescription(getDevice()->getName(), getName());
+	return getDevice()->getClient()->getDeviceVariableDescription(getDevice()->getName(), getName());
 }
 
 void Variable::setValue(const std::string& value)
@@ -1389,7 +1389,6 @@ Device* Command::getDevice()
 bool Command::isOk()const
 {
 	return _device!=NULL && !_name.empty();
-
 }
 
 Command::operator bool()const
@@ -1449,7 +1448,6 @@ void strarr_free(strarr arr)
 	free(arr);
 }
 
-
 strarr stringset_to_strarr(const std::set<std::string>& strset)
 {
 	strarr arr = strarr_alloc(strset.size());
@@ -1473,7 +1471,6 @@ strarr stringvector_to_strarr(const std::vector<std::string>& strset)
 	}
 	return arr;
 }
-
 
 NUTCLIENT_TCP_t nutclient_tcp_create_client(const char* host, unsigned short port)
 {
@@ -1525,7 +1522,6 @@ void nutclient_tcp_disconnect(NUTCLIENT_TCP_t client)
 	}
 }
 
-
 int nutclient_tcp_reconnect(NUTCLIENT_TCP_t client)
 {
 	if(client)
@@ -1568,7 +1564,6 @@ long nutclient_tcp_get_timeout(NUTCLIENT_TCP_t client)
 	}
 	return -1;
 }
-
 
 void nutclient_authenticate(NUTCLIENT_t client, const char* login, const char* passwd)
 {
@@ -1634,7 +1629,6 @@ int nutclient_get_device_num_logins(NUTCLIENT_t client, const char* dev)
 	}
 	return -1;
 }
-
 
 void nutclient_device_master(NUTCLIENT_t client, const char* dev)
 {
@@ -1844,8 +1838,6 @@ void nutclient_set_device_variable_values(NUTCLIENT_t client, const char* dev, c
 	}
 }
 
-
-
 strarr nutclient_get_device_commands(NUTCLIENT_t client, const char* dev)
 {
 	if(client)
@@ -1863,7 +1855,6 @@ strarr nutclient_get_device_commands(NUTCLIENT_t client, const char* dev)
 	return NULL;
 }
 
-
 int nutclient_has_device_command(NUTCLIENT_t client, const char* dev, const char* cmd)
 {
 	if(client)
@@ -1880,7 +1871,6 @@ int nutclient_has_device_command(NUTCLIENT_t client, const char* dev, const char
 	}
 	return 0;
 }
-
 
 char* nutclient_get_device_command_description(NUTCLIENT_t client, const char* dev, const char* cmd)
 {
@@ -1916,5 +1906,3 @@ void nutclient_execute_device_command(NUTCLIENT_t client, const char* dev, const
 }
 
 } /* extern "C" */
-
-
