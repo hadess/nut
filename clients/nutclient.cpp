@@ -169,7 +169,7 @@ void Socket::connect(const std::string& host, int port)
 		throw nut::UnknownHostException();
 	}
 
-	snprintf(sport, sizeof(sport), "%hu", (unsigned short int)port);
+	snprintf(sport, sizeof(sport), "%hu", static_cast<unsigned short int>(port));
 
 	memset(&hints, 0, sizeof(hints));
 	hints.ai_family = AF_UNSPEC;
@@ -345,7 +345,7 @@ size_t Socket::read(void* buf, size_t sz)
 		disconnect();
 		throw nut::IOException("Error while reading on socket");
 	}
-	return (size_t) res;
+	return static_cast<size_t>(res);
 }
 
 size_t Socket::write(const void* buf, size_t sz)
@@ -372,7 +372,7 @@ size_t Socket::write(const void* buf, size_t sz)
 		disconnect();
 		throw nut::IOException("Error while writing on socket");
 	}
-	return (size_t) res;
+	return static_cast<size_t>(res);
 }
 
 std::string Socket::read()
@@ -1449,7 +1449,7 @@ extern "C" {
 
 strarr strarr_alloc(unsigned short count)
 {
-	strarr arr = (strarr)xcalloc(count+1, sizeof(char*));
+	strarr arr = static_cast<strarr>(xcalloc(count+1, sizeof(char*)));
 	arr[count] = nullptr;
 	return arr;
 }
@@ -1495,7 +1495,7 @@ NUTCLIENT_TCP_t nutclient_tcp_create_client(const char* host, unsigned short por
 	try
 	{
 		client->connect(host, port);
-		return (NUTCLIENT_TCP_t)client;
+		return static_cast<NUTCLIENT_TCP_t>(client);
 	}
 	catch(nut::NutException& ex)
 	{
@@ -1510,7 +1510,7 @@ void nutclient_destroy(NUTCLIENT_t client)
 {
 	if(client)
 	{
-		delete (nut::Client*)client;
+		delete static_cast<nut::Client*>(client);
 	}
 }
 
@@ -1518,7 +1518,7 @@ int nutclient_tcp_is_connected(NUTCLIENT_TCP_t client)
 {
 	if(client)
 	{
-		nut::TcpClient* cl = dynamic_cast<nut::TcpClient*>((nut::Client*)client);
+		nut::TcpClient* cl = dynamic_cast<nut::TcpClient*>(static_cast<nut::Client*>(client));
 		if(cl)
 		{
 			return cl->isConnected() ? 1 : 0;
@@ -1531,7 +1531,7 @@ void nutclient_tcp_disconnect(NUTCLIENT_TCP_t client)
 {
 	if(client)
 	{
-		nut::TcpClient* cl = dynamic_cast<nut::TcpClient*>((nut::Client*)client);
+		nut::TcpClient* cl = dynamic_cast<nut::TcpClient*>(static_cast<nut::Client*>(client));
 		if(cl)
 		{
 			cl->disconnect();
@@ -1543,7 +1543,7 @@ int nutclient_tcp_reconnect(NUTCLIENT_TCP_t client)
 {
 	if(client)
 	{
-		nut::TcpClient* cl = dynamic_cast<nut::TcpClient*>((nut::Client*)client);
+		nut::TcpClient* cl = dynamic_cast<nut::TcpClient*>(static_cast<nut::Client*>(client));
 		if(cl)
 		{
 			try
@@ -1561,7 +1561,7 @@ void nutclient_tcp_set_timeout(NUTCLIENT_TCP_t client, long timeout)
 {
 	if(client)
 	{
-		nut::TcpClient* cl = dynamic_cast<nut::TcpClient*>((nut::Client*)client);
+		nut::TcpClient* cl = dynamic_cast<nut::TcpClient*>(static_cast<nut::Client*>(client));
 		if(cl)
 		{
 			cl->setTimeout(timeout);
@@ -1573,7 +1573,7 @@ long nutclient_tcp_get_timeout(NUTCLIENT_TCP_t client)
 {
 	if(client)
 	{
-		nut::TcpClient* cl = dynamic_cast<nut::TcpClient*>((nut::Client*)client);
+		nut::TcpClient* cl = dynamic_cast<nut::TcpClient*>(static_cast<nut::Client*>(client));
 		if(cl)
 		{
 			return cl->getTimeout();
@@ -1586,7 +1586,7 @@ void nutclient_authenticate(NUTCLIENT_t client, const char* login, const char* p
 {
 	if(client)
 	{
-		nut::Client* cl = (nut::Client*)client;
+		nut::Client* cl = static_cast<nut::Client*>(client);
 		if(cl)
 		{
 			try
@@ -1602,7 +1602,7 @@ void nutclient_logout(NUTCLIENT_t client)
 {
 	if(client)
 	{
-		nut::Client* cl = (nut::Client*)client;
+		nut::Client* cl = static_cast<nut::Client*>(client);
 		if(cl)
 		{
 			try
@@ -1618,7 +1618,7 @@ void nutclient_device_login(NUTCLIENT_t client, const char* dev)
 {
 	if(client)
 	{
-		nut::Client* cl = (nut::Client*)client;
+		nut::Client* cl = static_cast<nut::Client*>(client);
 		if(cl)
 		{
 			try
@@ -1634,7 +1634,7 @@ int nutclient_get_device_num_logins(NUTCLIENT_t client, const char* dev)
 {
 	if(client)
 	{
-		nut::Client* cl = (nut::Client*)client;
+		nut::Client* cl = static_cast<nut::Client*>(client);
 		if(cl)
 		{
 			try
@@ -1651,7 +1651,7 @@ void nutclient_device_master(NUTCLIENT_t client, const char* dev)
 {
 	if(client)
 	{
-		nut::Client* cl = (nut::Client*)client;
+		nut::Client* cl = static_cast<nut::Client*>(client);
 		if(cl)
 		{
 			try
@@ -1667,7 +1667,7 @@ void nutclient_device_forced_shutdown(NUTCLIENT_t client, const char* dev)
 {
 	if(client)
 	{
-		nut::Client* cl = (nut::Client*)client;
+		nut::Client* cl = static_cast<nut::Client*>(client);
 		if(cl)
 		{
 			try
@@ -1683,7 +1683,7 @@ strarr nutclient_get_devices(NUTCLIENT_t client)
 {
 	if(client)
 	{
-		nut::Client* cl = (nut::Client*)client;
+		nut::Client* cl = static_cast<nut::Client*>(client);
 		if(cl)
 		{
 			try
@@ -1700,7 +1700,7 @@ int nutclient_has_device(NUTCLIENT_t client, const char* dev)
 {
 	if(client)
 	{
-		nut::Client* cl = (nut::Client*)client;
+		nut::Client* cl = static_cast<nut::Client*>(client);
 		if(cl)
 		{
 			try
@@ -1717,7 +1717,7 @@ char* nutclient_get_device_description(NUTCLIENT_t client, const char* dev)
 {
 	if(client)
 	{
-		nut::Client* cl = (nut::Client*)client;
+		nut::Client* cl = static_cast<nut::Client*>(client);
 		if(cl)
 		{
 			try
@@ -1734,7 +1734,7 @@ strarr nutclient_get_device_variables(NUTCLIENT_t client, const char* dev)
 {
 	if(client)
 	{
-		nut::Client* cl = (nut::Client*)client;
+		nut::Client* cl = static_cast<nut::Client*>(client);
 		if(cl)
 		{
 			try
@@ -1751,7 +1751,7 @@ strarr nutclient_get_device_rw_variables(NUTCLIENT_t client, const char* dev)
 {
 	if(client)
 	{
-		nut::Client* cl = (nut::Client*)client;
+		nut::Client* cl = static_cast<nut::Client*>(client);
 		if(cl)
 		{
 			try
@@ -1768,7 +1768,7 @@ int nutclient_has_device_variable(NUTCLIENT_t client, const char* dev, const cha
 {
 	if(client)
 	{
-		nut::Client* cl = (nut::Client*)client;
+		nut::Client* cl = static_cast<nut::Client*>(client);
 		if(cl)
 		{
 			try
@@ -1785,7 +1785,7 @@ char* nutclient_get_device_variable_description(NUTCLIENT_t client, const char* 
 {
 	if(client)
 	{
-		nut::Client* cl = (nut::Client*)client;
+		nut::Client* cl = static_cast<nut::Client*>(client);
 		if(cl)
 		{
 			try
@@ -1802,7 +1802,7 @@ strarr nutclient_get_device_variable_values(NUTCLIENT_t client, const char* dev,
 {
 	if(client)
 	{
-		nut::Client* cl = (nut::Client*)client;
+		nut::Client* cl = static_cast<nut::Client*>(client);
 		if(cl)
 		{
 			try
@@ -1819,7 +1819,7 @@ void nutclient_set_device_variable_value(NUTCLIENT_t client, const char* dev, co
 {
 	if(client)
 	{
-		nut::Client* cl = (nut::Client*)client;
+		nut::Client* cl = static_cast<nut::Client*>(client);
 		if(cl)
 		{
 			try
@@ -1835,13 +1835,13 @@ void nutclient_set_device_variable_values(NUTCLIENT_t client, const char* dev, c
 {
 	if(client)
 	{
-		nut::Client* cl = (nut::Client*)client;
+		nut::Client* cl = static_cast<nut::Client*>(client);
 		if(cl)
 		{
 			try
 			{
 				std::vector<std::string> vals;
-				strarr pstr = (strarr)values;
+				strarr pstr = static_cast<strarr>(values);
 				while(*pstr)
 				{
 					vals.push_back(std::string(*pstr));
@@ -1859,7 +1859,7 @@ strarr nutclient_get_device_commands(NUTCLIENT_t client, const char* dev)
 {
 	if(client)
 	{
-		nut::Client* cl = (nut::Client*)client;
+		nut::Client* cl = static_cast<nut::Client*>(client);
 		if(cl)
 		{
 			try
@@ -1876,7 +1876,7 @@ int nutclient_has_device_command(NUTCLIENT_t client, const char* dev, const char
 {
 	if(client)
 	{
-		nut::Client* cl = (nut::Client*)client;
+		nut::Client* cl = static_cast<nut::Client*>(client);
 		if(cl)
 		{
 			try
@@ -1893,7 +1893,7 @@ char* nutclient_get_device_command_description(NUTCLIENT_t client, const char* d
 {
 	if(client)
 	{
-		nut::Client* cl = (nut::Client*)client;
+		nut::Client* cl = static_cast<nut::Client*>(client);
 		if(cl)
 		{
 			try
@@ -1910,7 +1910,7 @@ void nutclient_execute_device_command(NUTCLIENT_t client, const char* dev, const
 {
 	if(client)
 	{
-		nut::Client* cl = (nut::Client*)client;
+		nut::Client* cl = static_cast<nut::Client*>(client);
 		if(cl)
 		{
 			try
